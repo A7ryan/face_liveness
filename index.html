@@ -142,7 +142,7 @@ canvas {
             let model;
             async function loadModel() {
                 try {
-                    model = await tf.loadLayersModel('model.json');
+                    model = await tf.loadLayersModel('/face_liveness/model.json');
                     //model = await tf.loadLayersModel('/zeel_hackathon_model/model.json');
                     console.log('Model loaded');
                     document.getElementById('result').innerText = 'Model loaded successfully.';
