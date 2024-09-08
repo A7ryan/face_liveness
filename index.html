@@ -1,0 +1,130 @@
+<!-- Error loading model: TypeError: Cannot read properties of null (reading 'model_config') -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Liveness Detection</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <style>
+        #result {
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+        #score {
+            font-size: 1.5em;
+            color: green;
+            margin-top: 10px;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Face Liveness Detection</h1>
+    <button id="startButton">Start Webcam</button>
+    <video id="webcam" width="640" height="480" autoplay></video>
+    <canvas id="canvas" width="640" height="480" style="display: none;"></canvas>
+    <div id="result">Waiting for prediction...</div>
+    <div id="score">Score: N/A</div>
+    <div id="container"></div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let model;
+            async function loadModel() {
+                try {
+                    model = await tf.loadLayersModel('/zeel_hackathon_model/model.json');
+                    console.log('Model loaded');
+                    document.getElementById('result').innerText = 'Model loaded successfully.';
+                } catch (error) {
+                    console.error('Error loading model:', error);
+                    document.getElementById('result').innerText = 'Error loading model.';
+                    document.getElementById('result').classList.add('error');
+                }
+            }
+
+            async function setupWebcam() {
+                try {
+                    const video = document.getElementById('webcam');
+                    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                    video.srcObject = stream;
+                    return new Promise((resolve) => {
+                        video.onloadedmetadata = () => {
+                            resolve(video);
+                        };
+                    });
+                } catch (error) {
+                    console.error('Error accessing webcam:', error);
+                    document.getElementById('result').innerText = 'Error accessing webcam.';
+                    document.getElementById('result').classList.add('error');
+                }
+            }
+
+            function captureFrame(video) {
+                const canvas = document.getElementById('canvas');
+                const context = canvas.getContext('2d');
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                return tf.browser.fromPixels(canvas);
+            }
+
+            async function predict() {
+                if (!model) {
+                    console.log('Model not loaded');
+                    return;
+                }
+
+                try {
+                    const video = document.getElementById('webcam');
+                    if (!video) {
+                        throw new Error('Video element not found');
+                    }
+                    
+                    const imgTensor = captureFrame(video);
+                    const resized = tf.image.resizeBilinear(imgTensor, [224, 224]);
+                    const normalized = resized.div(tf.scalar(255.0));
+                    const batched = normalized.expandDims(0);
+                    
+
+                    // https://stackoverflow.com/questions/226847/what-is-the-best-javascript-code-to-create-an-img-element
+                    // var img = document.createElement('img');
+                    // img.src = '/zeel_hackathon_model/elon_musk.jpg';
+                    
+                    // document.getElementById('container').appendChild(img);
+                    
+                    const prediction = model.predict(batched);
+                    // const prediction = model.predict(img);
+                    const predictionArray = await prediction.array();
+                    console.log("\n\nPrediction Analysis: ", predictionArray);
+                    
+                    // document.getElementById('result').innerText = 'Prediction result: ' + predictionArray[0];
+                    document.getElementById('score').innerText = 'Score: ' + predictionArray[0];
+                    
+                    prediction.dispose();
+                } catch (error) {
+                    console.error('Error making prediction:', error);
+                    document.getElementById('result').innerText = 'Error making prediction.';
+                    document.getElementById('result').classList.add('error');
+                }
+            }
+
+            const startButton = document.getElementById('startButton');
+            if (startButton) {
+                startButton.addEventListener('click', async () => {
+                    await loadModel();
+                    await setupWebcam(); 
+                    document.getElementById('webcam').play();
+                    
+                    setInterval(predict, 10000); // Adjust interval as needed
+                });
+            } else {
+                console.error('Start button not found');
+                document.getElementById('result').innerText = 'Start button not found.';
+                document.getElementById('result').classList.add('error');
+            }
+        }); 
+    </script>
+</body>
+</html>
