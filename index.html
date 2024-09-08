@@ -7,143 +7,143 @@
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
     <style>
         /* Reset default margin and padding */
-        body, html {
-            margin-top: 10px;
-            padding: 0;
-        }
+body, html {
+    margin-top: 10px;
+    padding: 0;
+}
 
-        /* Center content and provide spacing */
-        body {
-            font-family: monospace;
-            color: green;
-            background-color: lightyellow;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
 
-        #hackathon_data {
-            font-size: 15px;
-            color: red;
-        }
+/* Center content and provide spacing */
+body {
+    font-family: monospace;
+    color: green;
+    background-color: lightyellow;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 
-        /* Center the logo */
-        #logo {
-            height: 40px;
-            width: auto;
-        }
+#hackathon_data {
+    font-size: 15px;
+    color: red;
+}
 
-        #logo2 {
-            height: 60px;
-            width: auto;
-        }
 
-        /* Style for the heading */
-        h1 {
-            color: green;
-            font-size: 22px;
-            letter-spacing: 0.1px;
-            /* text-transform: uppercase; */
-        }
+/* Center the logo */
+#logo {
+    height: 40px;
+    width: auto;
+}
 
-        /* Style for the start button */
-        #startButton, #stopButton {
-            background-color: green;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            font-size: 13px;
-            cursor: pointer;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            letter-spacing: 0.5px;
-        }
+#logo2 {
+    height: 60px;
+    width: auto;
+}
 
-        #startButton:hover, #stopButton:hover {
-            background-color: greenyellow;
-            color: black;
-        }
+/* Style for the heading */
+h1 {
+    color: green;
+    font-size: 22px;
+    letter-spacing: 0.1px;
+    /* text-transform: uppercase; */
+}
 
-        /* Style for the webcam video */
-        #webcam {
-            /* border: 2px solid green; */
-            border-radius: 10px;
-            padding: 10px;
-            margin-bottom: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        }
+/* Style for the start button */
+#startButton {
+    background-color: green;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+}
+ 
+#startButton:hover {
+    background-color: greenyellow;
+    color: black;
+}
 
-        /* Style for result text and score */
-        #result {
-            font-size: 1.2em;
-            font-weight: bold;
-            color: green;
-            margin-bottom: 10px;
-        }
+/* Style for the webcam video */
+#webcam {
+    /* border: 2px solid green; */
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
 
-        #score {
-            font-size: 1.5em;
-            color: green;
-        }
+/* Style for result text and score */
+#result {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: green;
+    margin-bottom: 10px;
+}
 
-        /* Error styling */
-        .error {
-            color: red;
-        }
+#score {
+    font-size: 1.5em;
+    color: green;
+}
 
-        /* Responsive design for smaller screens */
-        @media (max-width: 600px) {
-            #startButton {
-                padding: 10px 20px;
-                font-size: 14px;
-            }
+/* Error styling */
+.error {
+    color: red;
+}
 
-            #webcam {
-                width: 100%;
-                max-width: 300px;
-                height: auto;
-            }
+/* Responsive design for smaller screens */
+@media (max-width: 600px) {
+    #startButton {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
 
-            #result, #score {
-                
-            }
-        }
+    #webcam {
+        width: 100%;
+        max-width: 300px;
+        height: auto;
+    }
 
-        canvas {
-            display: none;
-        }
+    #result, #score {
+        
+    }
+}
+
+canvas {
+    display: none;
+}
 
     </style>
 </head>
 <body>
     <marquee id="hackathon_data" onMouseOver="this.stop()" onMouseOut="this.start()">Problem Statement ID: <u>1671</u>&nbsp; Problem: <a href='https://sih.gov.in/sih2024PS' target="_blank" rel="noopener noreferrer">Link</a>&nbsp; Ppt <a href="https://docs.google.com/presentation/d/1aHH51VaG_0DT1kQ5UHXsaBbRT8xYRY-6/edit" target="_blank" rel="noopener noreferrer">Link</a> </marquee>
     <div class="logos">
-        <img id="logo" src="sih_logo.png" alt="Logo">
-        &nbsp;&nbsp;&nbsp;
-        <img id="logo2" src="sih_hackathon_logo.png" alt="Logo">
+    <img id="logo" src="sih_logo.png" alt="Logo">
+    &nbsp;&nbsp;&nbsp;
+    <img id="logo2" src="sih_hackathon_logo.png" alt="Logo">
     </div>
     <h1>Face Liveness Detection</h1>
     <div class="webcam-buttons">
         <button id="startButton">Start Webcam</button>
-        <button id="stopButton">Stop Webcam</button>
+        <button id="startButton">Stop Webcam</button>
     </div>
     <video id="webcam" width="600" height="440" autoplay></video>
     <canvas id="canvas" width="600" height="440"></canvas>
     <div id="result"></div>
     <div id="score">Score:</div>
     <div id="container"></div>
-
+    
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             let model;
-            let stream; // Declare stream here to be accessible
-
             async function loadModel() {
                 try {
-                    // model = await tf.loadLayersModel('/zeel_hackathon_model/model.json');
                     model = await tf.loadLayersModel('/face_liveness/model.json');
+                    //model = await tf.loadLayersModel('/zeel_hackathon_model/model.json');
                     console.log('Model loaded');
                     document.getElementById('result').innerText = 'Model loaded successfully.';
                 } catch (error) {
@@ -156,7 +156,7 @@
             async function setupWebcam() {
                 try {
                     const video = document.getElementById('webcam');
-                    stream = await navigator.mediaDevices.getUserMedia({ video: true }); // Save the stream
+                    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
                     video.srcObject = stream;
                     return new Promise((resolve) => {
                         video.onloadedmetadata = () => {
@@ -188,7 +188,7 @@
                     if (!video) {
                         throw new Error('Video element not found');
                     }
-
+                    
                     const imgTensor = captureFrame(video);
                     const resized = tf.image.resizeBilinear(imgTensor, [224, 224]);
                     const normalized = resized.div(tf.scalar(255.0));
@@ -197,9 +197,9 @@
                     const prediction = model.predict(batched);
                     const predictionArray = await prediction.array();
                     console.log("\n\nPrediction Analysis: ", predictionArray);
-
+                    
                     document.getElementById('score').innerText = 'Score: ' + predictionArray[0];
-
+                    
                     prediction.dispose();
                 } catch (error) {
                     console.error('Error making prediction:', error);
@@ -222,15 +222,7 @@
                 document.getElementById('result').innerText = 'Start button not found.';
                 document.getElementById('result').classList.add('error');
             }
-
-            document.getElementById('stopButton').addEventListener('click', () => {
-                if (stream) {
-                    const tracks = stream.getTracks();
-                    tracks.forEach(track => track.stop());
-                    document.getElementById('webcam').srcObject = null;
-                }
-            });
-        });
+        }); 
     </script>
 </body>
 </html>
